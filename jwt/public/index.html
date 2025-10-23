@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>sign in</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function signup(){
+            const username = document.getElementById("newuser").value;
+            const password = document.getElementById("newpass").value;
+
+            await axios.post("http://localhost:3000/signup",{
+                username: username,
+                password: password
+            })
+            alert("Done");
+        }
+        async function signin(){
+            const username = document.getElementById("sign-in-user").value;
+            const password = document.getElementById("sign-in-pass").value;
+
+            const response = await axios.post("http://localhost:3000/signin",{
+                username:username,
+                password:password
+            });
+
+            localStorage.setItem("token",response.data.token);
+            alert("welcome yo!!");
+        }
+        async function getinfo(){
+            const token = localStorage.getItem("token");
+            const response = await axios.get("http://localhost:3000/me",{
+                headers: {
+                    token: token
+                }
+            });
+            document.getElementById("information").innerHTML = "username : "+response.data.username+"<br>password : "+response.data.password;
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <input type="text" placeholder="username" id="newuser">
+        <input type="password" placeholder="password" id="newpass">
+        <button onclick="signup()">Sign Up</button>
+    </div>
+
+    <br>
+
+    <div>
+        <input type="text" placeholder="username" id="sign-in-user">
+        <input type="password" placeholder="password" id="sign-in-pass">
+        <button onclick="signin()">Sign in</button>
+    </div>
+
+    <br>
+
+    <div>
+        user information : <button onclick="getinfo()">click here</button>
+        <div id="information"></div>
+    </div>
+
+
+
+
+</body>
+</html>

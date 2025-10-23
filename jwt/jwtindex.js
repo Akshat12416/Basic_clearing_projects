@@ -18,13 +18,17 @@ function Auth(req,res,next){
     }
 }
 
+app.get('/',function(req,res){
+    res.sendFile(__dirname+"/public/index.html")
+})
+
 app.post('/signup', (req,res)=>{
     const username = req.body.username;
-    const pass = req.body.pass;
+    const password = req.body.password;
 
     users.push({
         username: username,
-        password: pass
+        password: password
     });
     console.log(users);
     res.send("you signed up!!");
@@ -32,11 +36,11 @@ app.post('/signup', (req,res)=>{
 
 app.post('/signin', (req,res)=>{
     const username = req.body.username;
-    const pass = req.body.pass;
+    const password = req.body.password;
 
     curruser = null;
     for(i=0; i<users.length; i++){
-        if(users[i].username === username && users[i].password === pass){
+        if(users[i].username === username && users[i].password === password){
             curruser = users[i];
         }
     }
@@ -58,9 +62,9 @@ app.post('/signin', (req,res)=>{
     console.log(users);
 })
 
-app.use(Auth);
 
-app.get('/me',(req,res)=>{
+
+app.get('/me',Auth,(req,res)=>{
     username = req.username;
     let founduser = null;
     for(i=0; i<users.length; i++){
