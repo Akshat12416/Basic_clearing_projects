@@ -35,6 +35,9 @@
             });
             document.getElementById("information").innerHTML = "username : "+response.data.username+"<br>password : "+response.data.password;
         }
+        function logout(){
+            localStorage.removeItem("token");
+        }
     </script>
 </head>
 <body>
@@ -55,9 +58,15 @@
     <br>
 
     <div>
-        user information : <button onclick="getinfo()">click here</button>
+        user information : 
+        <button onclick="getinfo()">click here</button>
         <div id="information"></div>
     </div>
+
+    <br>
+    <br>
+
+    <button onclick="logout()">logout</button>
 
 
 
