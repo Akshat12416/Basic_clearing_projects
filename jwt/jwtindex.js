@@ -6,7 +6,21 @@ const JWT_SECRET = "hello";
 app.use(express.json());
 users = [];
 
-
+function Auth(req,res,next){
+    const token = req.headers.token;
+    decodedtoken = jwt.verify(token,JWT_SECRET);
+    founduser = null;
+    for(i=0; i<users.length; i++){
+        if(users[i].username === decodedtoken.username){
+            founduser = users[i];
+        }
+    }
+    if(founduser){
+        next();
+    }else{
+        res.send("user not found");
+    }
+}
 
 app.post('/signup', (req,res)=>{
     const username = req.body.username;
@@ -48,20 +62,11 @@ app.post('/signin', (req,res)=>{
     console.log(users);
 })
 
+app.use(Auth);
+
 app.get('/me',(req,res)=>{
-    const usertoken = req.headers.token;
-    decodedtoken = jwt.verify(usertoken,JWT_SECRET);
-
-    let founduser = null;
-    for(i=0; i<users.length; i++){
-        if(users[i].username == decodedtoken.username){
-            founduser = users[i];
-            break;
-        }
-    }
-
     if(founduser){
-        res.status(200).send(founduser);
+        res.status(200).send({"username":founduser.username,"password":founduser.password});
     }else{
         res.status(403).send("user not found or token invalid")
     }
