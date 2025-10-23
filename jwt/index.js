@@ -13,6 +13,7 @@ function generatetoken(){
     return token;
 }
 
+
 app.post('/signup', (req,res)=>{
     const username = req.body.username;
     const pass = req.body.pass;
