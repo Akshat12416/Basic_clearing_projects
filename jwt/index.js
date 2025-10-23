@@ -51,6 +51,25 @@ app.post('/signin', (req,res)=>{
     console.log(users);
 })
 
+app.get('/me',(req,res)=>{
+    const usertoken = req.headers.token;
+
+    let founduser = null;
+    for(i=0; i<users.length; i++){
+        if(users[i].token == usertoken){
+            founduser = users[i];
+            break;
+        }
+    }
+
+    if(founduser){
+        res.status(200).send(founduser);
+    }else{
+        res.status(403).send("user not found or token invalid")
+    }
+
+})
+
 
 
 app.listen(3000);
