@@ -9,13 +9,9 @@ users = [];
 function Auth(req,res,next){
     const token = req.headers.token;
     decodedtoken = jwt.verify(token,JWT_SECRET);
-    founduser = null;
-    for(i=0; i<users.length; i++){
-        if(users[i].username === decodedtoken.username){
-            founduser = users[i];
-        }
-    }
-    if(founduser){
+    
+    if(decodedtoken.username){
+        req.username = decodedtoken.username;
         next();
     }else{
         res.send("user not found");
@@ -65,6 +61,14 @@ app.post('/signin', (req,res)=>{
 app.use(Auth);
 
 app.get('/me',(req,res)=>{
+    username = req.username;
+    let founduser = null;
+    for(i=0; i<users.length; i++){
+        if(users[i].username === username){
+            founduser = users[i];
+        }
+    }
+
     if(founduser){
         res.status(200).send({"username":founduser.username,"password":founduser.password});
     }else{
